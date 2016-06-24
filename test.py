@@ -26,22 +26,15 @@ class TestU8(unittest.TestCase):
     signed = False
     width = 8
 
-    @property
-    def maximum(self):
-        return btoi('1' * (self.width - self.signed))
-
-    @property
-    def base(self):
-        return 2 ** self.width
-
     def correct(self, N):
         return rectify(N, self.width, self.signed)
 
     def test_bounded(self):
+        MAX = btoi('1' * (self.width - self.signed))
+
         for N in range(0, 100):
             assert self.integer_class(N) == self.correct(N)
-            assert self.integer_class(self.maximum + N) == \
-                    self.correct(self.maximum + N)
+            assert self.integer_class(MAX + N) == self.correct(MAX + N)
 
     def test_mutable(self):
         u = self.integer_class(10)
