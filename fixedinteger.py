@@ -11,11 +11,11 @@ def rectify(val, width, signed):
     return val & mask
 
 
-def fixed_int(name, width, signed, rectify=rectify):
+def fixed_int(name, width, signed, _rectify=rectify):
     class _Int(Integer):
         __slots__ = ()
         def __new__(cls, v):
-            return Integer.__new__(cls, rectify(v, width, signed))
+            return Integer.__new__(cls, _rectify(v, width, signed))
     return type(
         name,
         (_Int,),

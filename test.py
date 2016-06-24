@@ -1,5 +1,5 @@
 import unittest
-from fixedinteger import rectify, u8, u32, u64, i8, i32, i64
+from fixedinteger import rectify, u8, u32, u64, i8, i32, i64, fixed_int
 
 
 btoi = lambda x: int(x, base=2)
@@ -45,17 +45,23 @@ class TestU8(unittest.TestCase):
 
     def test_mutable(self):
         u = self.integer_class(10)
+        g = self.correct(10)
+
         u += 1
-        assert u == self.correct(10 + 1)
+        g = self.correct(g + 1)
+        assert u == g
 
         u >>= 1
-        assert u == self.correct(11 >> 1)
+        g = self.correct(g >> 1)
+        assert u == g
 
         u <<= 2
-        assert u == self.correct(5 << 2)
+        g = self.correct(g << 2)
+        assert u == g
 
         u -= 1
-        assert u == self.correct(20 - 1)
+        g = self.correct(g - 1)
+        assert u == g
 
 
 class TestU32(TestU8):
@@ -81,6 +87,18 @@ class TestI32(TestI8):
 class TestI64(TestI8):
     integer_class = i64
     width = 64
+
+
+class TestCustomSignedFixedInt(TestI8):
+    integer_class = fixed_int('', 2, True)
+    signed = True
+    width = 2
+
+
+class TestCustomUnsignedFixedInt(TestI8):
+    integer_class = fixed_int('', 2, False)
+    signed = False
+    width = 2
 
 
 if __name__ == '__main__':
