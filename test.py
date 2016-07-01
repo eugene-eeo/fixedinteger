@@ -8,17 +8,20 @@ btoi = lambda x: int(x, base=2)
 class TestRectify(unittest.TestCase):
     def test_overflow_full(self):
         MAX = btoi('1' * 8)
-        assert rectify(btoi('1' * 10), 8, False) == MAX
-        assert rectify(btoi('1' * 8),  8, False) == MAX
+        R   = rectify(8, False)
+        assert R(btoi('1' * 10)) == MAX
+        assert R(btoi('1' * 8)) == MAX
 
     def test_underflow_unsigned(self):
+        R = rectify(8, False)
         for n in range(0, 2**8 - 1):
-            assert rectify(n, 8, False) == n
+            assert R(n) == n
 
     def test_underflow_signed(self):
+        R = rectify(8, True)
         for n in range(0, 2**7 - 1):
-            assert rectify(n, 8, True)  == n
-            assert rectify(-n, 8, True) == -n
+            assert R(n)  == n
+            assert R(-n) == -n
 
 
 class TestU8(unittest.TestCase):
@@ -27,7 +30,7 @@ class TestU8(unittest.TestCase):
     width = 8
 
     def correct(self, N):
-        return rectify(N, self.width, self.signed)
+        return rectify(self.width, self.signed)(N)
 
     def test_bounded(self):
         MAX = btoi('1' * (self.width - self.signed))

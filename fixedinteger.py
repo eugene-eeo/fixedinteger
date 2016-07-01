@@ -1,21 +1,29 @@
 from integer import Integer
 
 
-def rectify(val, width, signed):
+def rectify(width, signed):
     if signed:
         mask1 = (1 << (width - 1)) - 1
         mask2 = (1 << (width - 1))
-        return (val & mask1) - (val & mask2)
 
-    mask = (1 << width) - 1
-    return val & mask
+        def correct(val):
+            return (val & mask1) - (val & mask2)
+        return correct
+
+    else:
+        mask = (1 << width) - 1
+        def correct(val):
+            return val & mask
+        return correct
 
 
-def fixed_int(name, width, signed, _rectify=rectify):
+def fixed_int(name, width, signed):
+    method = rectify(width, signed)
+
     class _Int(Integer):
         __slots__ = ()
         def __new__(cls, v):
-            return Integer.__new__(cls, _rectify(v, width, signed))
+            return Integer.__new__(cls, method(v))
     return type(
         name,
         (_Int,),
