@@ -5,16 +5,10 @@ def rectify(width, signed):
     if signed:
         mask1 = (1 << (width - 1)) - 1
         mask2 = (1 << (width - 1))
+        return lambda v: (v & mask1) - (v & mask2)
 
-        def correct(val):
-            return (val & mask1) - (val & mask2)
-        return correct
-
-    else:
-        mask = (1 << width) - 1
-        def correct(val):
-            return val & mask
-        return correct
+    mask = (1 << width) - 1
+    return lambda v: v & mask
 
 
 def fixed_int(name, width, signed):
