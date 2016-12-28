@@ -12,17 +12,13 @@ def rectify(width, signed):
 
 
 def fixed_int(name, width, signed):
-    method = rectify(width, signed)
+    fix = rectify(width, signed)
 
     class _Int(Integer):
         __slots__ = ()
         def __new__(cls, v):
-            return Integer.__new__(cls, method(v))
-    return type(
-        name,
-        (_Int,),
-        {},
-        )
+            return Integer.__new__(cls, fix(v))
+    return type(name, (_Int,), {})
 
 
 u8  = fixed_int('u8',  8, False)
